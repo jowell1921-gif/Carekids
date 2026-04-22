@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="carekids_blue">#8FC6FF</color>
+    <color name="carekids_light_blue">#CDEAFF</color>
+    <color name="carekids_pink">#F7B5C8</color>
+    <color name="carekids_light_pink">#FDE2E9</color>
+    <color name="carekids_peach">#FBCFA4</color>
+    <color name="carekids_yellow">#FFE49A</color>
+    <color name="carekids_mint">#C8F1E1</color>
+    <color name="carekids_lilac">#C7B6FF</color>
+</resources>
