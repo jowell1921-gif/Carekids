@@ -29,7 +29,6 @@ import com.example.carekids.data.model.NewsItem
 import com.example.carekids.ui.theme.CareKidsTheme
 import kotlinx.coroutines.delay
 
-
 @Composable
 fun NewsCarousel(
     modifier: Modifier = Modifier,

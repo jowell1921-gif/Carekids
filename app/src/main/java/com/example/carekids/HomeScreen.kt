@@ -23,6 +23,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +53,10 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.carekids.ui.home.HomeViewModel
+import com.example.carekids.ui.home.HomeUiState
 import com.example.carekids.ui.theme.FredokaFamily
 import kotlinx.coroutines.launch
 import com.airbnb.lottie.compose.LottieAnimation
@@ -69,16 +74,50 @@ import com.airbnb.lottie.compose.rememberLottieComposition
  * All rights reserved 2025.
  */
 
+// ── Punto de entrada para la navegación ───────────────────────────────────────
+// Esta función conoce el ViewModel. ContentView no lo conoce.
+// Separar "quién obtiene los datos" de "quién los muestra" es la esencia de MVVM.
+
+@Composable
+fun HomeScreen(
+    onProfileClick: () -> Unit,
+    onPetClick: () -> Unit,
+    onDialogClick: () -> Unit,
+    onEmotionalClick: () -> Unit,
+    onLearnClick: () -> Unit,
+    onHospitalClick: () -> Unit,
+    viewModel: HomeViewModel = viewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    ContentView(
+        modifier         = Modifier,
+        uiState          = uiState,
+        onProfileClick   = onProfileClick,
+        onPetClick       = onPetClick,
+        onDialogClick    = onDialogClick,
+        onEmotionalClick = onEmotionalClick,
+        onLearnClick     = onLearnClick,
+        onHospitalClick  = onHospitalClick
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewContentView() {
-    ContentView(modifier = Modifier, {}, {})
+    ContentView(modifier = Modifier, uiState = HomeUiState(), {}, {}, {}, {}, {}, {})
 }
 
 @Composable
-fun ContentView (modifier: Modifier,
-                 onProfileClick: () -> Unit,
-                 onDialogClick: () -> Unit) {
+fun ContentView(
+    modifier: Modifier,
+    uiState: HomeUiState,
+    onProfileClick: () -> Unit,
+    onPetClick: () -> Unit,
+    onDialogClick: () -> Unit,
+    onEmotionalClick: () -> Unit,
+    onLearnClick: () -> Unit,
+    onHospitalClick: () -> Unit
+) {
     Column (modifier = Modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState())
@@ -159,10 +198,10 @@ fun ContentView (modifier: Modifier,
                     .weight(1f)
                     .height(60.dp),
                 imageRes = R.drawable.icon_animal,
-                text = "¡Mi mascota!",
+                text = "Mi mascota",
                 backgroundColor = colorResource(R.color.carekids_blue),
-                textColor = Color(0xFF6A0572),
-                onClick = { /* acción del botón */ }
+                textColor = Color.Black,
+                onClick = onPetClick
             )
             //BOTÓN SUPERIOR DERECHO
             IconCardButtom(
@@ -172,8 +211,8 @@ fun ContentView (modifier: Modifier,
                 imageRes = R.drawable.icon_hospital,
                 text = "¡A jugar y aprender!",
                 backgroundColor = colorResource(R.color.carekids_yellow),
-                textColor = Color(0xFF1565C0),
-                onClick = { /* acción del botón */ }
+                textColor = Color.Black,
+                onClick = onLearnClick
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -186,14 +225,14 @@ fun ContentView (modifier: Modifier,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ){
             IconCardButtom(
-                onClick = {},
+                onClick = onEmotionalClick,
                 modifier = Modifier
                     .weight(1f)
                     .height(60.dp),
                 imageRes = R.drawable.icon_people,
-                text = "¿Cómo estoy hoy?",
+                text = "Mi diario personal",
                 backgroundColor = colorResource(R.color.carekids_yellow),
-                textColor = Color(0xFFB71C1C),
+                textColor = Color.Black,
             )
             //BOTÓN INFERIOR DERECHO
             IconCardButtom(
@@ -202,9 +241,9 @@ fun ContentView (modifier: Modifier,
                     .weight(1f)
                     .height(60.dp),
                 imageRes = R.drawable.icon_rewards,
-                text = "¡Mis premios!",
+                text = "Mis premios",
                 backgroundColor = colorResource(R.color.carekids_blue),
-                textColor = Color(0xFF1B5E20),
+                textColor = Color.Black,
             )
         }
             // PRIMER DIVIDER
@@ -225,7 +264,8 @@ fun ContentView (modifier: Modifier,
                     .padding(horizontal = 16.dp),
                 image = R.drawable.hospital_family,
                 text = "Mi hospital y yo",
-                backgroundColor = colorResource(R.color.carekids_yellow)
+                backgroundColor = colorResource(R.color.carekids_yellow),
+                onClick = onHospitalClick
             )
             Spacer(modifier = Modifier.height(24.dp))
 

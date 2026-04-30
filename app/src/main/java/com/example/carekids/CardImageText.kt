@@ -53,7 +53,9 @@ fun CardImageText(
     modifier: Modifier = Modifier,
     image: Int,
     text: String,
-    backgroundColor: Color) {
+    backgroundColor: Color,
+    onClick: () -> Unit = {}
+) {
     Card(
         modifier = modifier
             .height(120.dp)
@@ -84,22 +86,17 @@ fun CardImageText(
                         .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
-                )   { // Efecto pop
+                )   {
                         scope.launch {
-                            scale.animateTo(
-                                targetValue = 1.2f, // zoom hacia afuera
-                                animationSpec = tween(durationMillis = 150)
-                            )
-                            scale.animateTo(
-                                targetValue = 1f, // vuelve al tamaño normal
-                                animationSpec = tween(durationMillis = 150)
-                            )
+                            scale.animateTo(1.2f, animationSpec = tween(150))
+                            scale.animateTo(1f,   animationSpec = tween(150))
+                            onClick()
                         }
                     }
                 )
             }
 
-        Text(text = "Estación de la familia",
+        Text(text = text,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             color = Color.White,
