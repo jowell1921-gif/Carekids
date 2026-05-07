@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.carekids.HomeScreen
+import com.example.carekids.UserLogin
+import com.google.firebase.auth.FirebaseAuth
 import com.example.carekids.ui.emotional.EmotionalHistoryScreen
 import com.example.carekids.ui.emotional.EmotionalScreen
 import com.example.carekids.ui.hospital.HospitalScreen
@@ -19,8 +21,10 @@ import com.example.carekids.ui.learn.MythGameScreen
 import com.example.carekids.ui.pet.PetScreen
 import com.example.carekids.ui.profile.ProfileScreen
 import com.example.carekids.ui.rewards.RewardsScreen
+import com.example.carekids.ui.stories.StoryReaderScreen
 
 object Routes {
+    const val LOGIN              = "login"
     const val HOME               = "home"
     const val PROFILE            = "profile"
     const val PET                = "pet"
@@ -34,17 +38,32 @@ object Routes {
     const val PROCEDURE_DETAIL   = "procedure_detail/{procedureId}"
     const val TEAM               = "team"
     const val RIGHTS             = "rights"
+    const val STORY_READER       = "story_reader/{storyId}"
 
     fun mythGame(diseaseId: String)       = "myth_game/$diseaseId"
     fun procedureDetail(id: String)       = "procedure_detail/$id"
+    fun storyReader(storyId: String)      = "story_reader/$storyId"
 }
 
 @Composable
 fun NavGraph(navController: NavHostController) {
+    val startDestination = if (FirebaseAuth.getInstance().currentUser != null) Routes.HOME else Routes.LOGIN
+
     NavHost(
         navController    = navController,
-        startDestination = Routes.HOME
+        startDestination = startDestination
     ) {
+        composable(Routes.LOGIN) {
+            UserLogin(
+                modifier = androidx.compose.ui.Modifier,
+                onLoginSuccess = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable(Routes.HOME) {
             HomeScreen(
                 onProfileClick   = { navController.navigate(Routes.PROFILE) },
@@ -52,7 +71,8 @@ fun NavGraph(navController: NavHostController) {
                 onDialogClick    = { navController.navigate(Routes.REWARDS) },
                 onEmotionalClick = { navController.navigate(Routes.EMOTIONAL) },
                 onLearnClick     = { navController.navigate(Routes.LEARN) },
-                onHospitalClick  = { navController.navigate(Routes.HOSPITAL) }
+                onHospitalClick  = { navController.navigate(Routes.HOSPITAL) },
+                onStoryClick     = { storyId -> navController.navigate(Routes.storyReader(storyId)) }
             )
         }
 
@@ -122,6 +142,13 @@ fun NavGraph(navController: NavHostController) {
 
         composable(Routes.RIGHTS) {
             RightsScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(
+            route     = Routes.STORY_READER,
+            arguments = listOf(navArgument("storyId") { type = NavType.StringType })
+        ) {
+            StoryReaderScreen(onBack = { navController.popBackStack() })
         }
     }
 }

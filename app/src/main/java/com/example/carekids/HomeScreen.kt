@@ -86,6 +86,7 @@ fun HomeScreen(
     onEmotionalClick: () -> Unit,
     onLearnClick: () -> Unit,
     onHospitalClick: () -> Unit,
+    onStoryClick: (String) -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -97,14 +98,15 @@ fun HomeScreen(
         onDialogClick    = onDialogClick,
         onEmotionalClick = onEmotionalClick,
         onLearnClick     = onLearnClick,
-        onHospitalClick  = onHospitalClick
+        onHospitalClick  = onHospitalClick,
+        onStoryClick     = onStoryClick
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewContentView() {
-    ContentView(modifier = Modifier, uiState = HomeUiState(), {}, {}, {}, {}, {}, {})
+    ContentView(modifier = Modifier, uiState = HomeUiState(), {}, {}, {}, {}, {}, {}, {})
 }
 
 @Composable
@@ -116,7 +118,8 @@ fun ContentView(
     onDialogClick: () -> Unit,
     onEmotionalClick: () -> Unit,
     onLearnClick: () -> Unit,
-    onHospitalClick: () -> Unit
+    onHospitalClick: () -> Unit,
+    onStoryClick: (String) -> Unit = {}
 ) {
     Column (modifier = Modifier
         .fillMaxSize()
@@ -269,8 +272,8 @@ fun ContentView(
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            // CARRUSEL DE NOTICIAS
-            NewsCarousel()
+            // CARRUSEL DE CUENTOS
+            StoriesCarousel(onStoryClick = onStoryClick)
 
             Spacer(modifier = Modifier.height(32.dp))
             // SEGUNDO DIVIDER

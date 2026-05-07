@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1002102051247",
+    "project_id": "carekids-311c3",
+    "storage_bucket": "carekids-311c3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002102051247:android:11373c62b503607c1b9f5a",
+        "android_client_info": {
+          "package_name": "com.example.carekids"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMqpoXYfsGEJCHFWjw6odPqx7bC4QTfvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
